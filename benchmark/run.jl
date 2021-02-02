@@ -23,7 +23,7 @@ function main()
     if length(ARGS) >= 3 && !isempty(strip(ARGS[3]))
       results_dir = ARGS[3]
     else
-      results_dir = string("./","results$mode")
+      results_dir = string(pwd(),"/","results$mode")
     end
 
     # Validate mode and set formulation
@@ -51,6 +51,12 @@ function main()
       global_logger(TimeLogger(initial_time = time(), file = logfile))
     else
       global_logger(TimeLogger(initial_time = time()))
+    end
+
+    # Check that results_dir exists
+    if !isdir(model_filename_stub)
+      @info("Creating $model_filename_stub")
+      mkpath(model_filename_stub)
     end
 
     total_time = @elapsed begin
